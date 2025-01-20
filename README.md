@@ -164,7 +164,7 @@ rails:
     flows:
       - self check facts
       - self check hallucination
-      - activefence moderation
+      - activefence moderation on input
 
   config:
     # Configure the types of entities that should be masked on user input.

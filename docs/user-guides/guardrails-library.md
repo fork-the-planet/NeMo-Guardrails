@@ -684,7 +684,7 @@ This category of rails relies on 3rd party APIs for various guardrailing tasks.
 
 ### ActiveFence
 
-NeMo Guardrails supports using the [ActiveFence ActiveScore API](https://docs.activefence.com/index.html) as an input rail out-of-the-box (you need to have the `ACTIVEFENCE_API_KEY` environment variable set).
+NeMo Guardrails supports using the [ActiveFence ActiveScore API](https://docs.activefence.com/index.html) as an input and output rail out-of-the-box (you need to have the `ACTIVEFENCE_API_KEY` environment variable set).
 
 #### Example usage
 
@@ -692,7 +692,10 @@ NeMo Guardrails supports using the [ActiveFence ActiveScore API](https://docs.ac
 rails:
   input:
     flows:
-      - activefence moderation
+      - activefence moderation on input
+  output:
+    flows:
+      - activefence moderation on output
 ```
 
 For more details, check out the [ActiveFence Integration](./community/active-fence.md) page.

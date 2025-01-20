@@ -19,7 +19,7 @@ from nemoguardrails import RailsConfig
 from tests.utils import TestChat
 
 
-def test_1(monkeypatch):
+def test_input(monkeypatch):
     monkeypatch.setenv("ACTIVEFENCE_API_KEY", "xxx")
 
     config = RailsConfig.from_content(
@@ -43,7 +43,7 @@ def test_1(monkeypatch):
             rails:
               input:
                 flows:
-                  - activefence moderation
+                  - activefence moderation on input
         """,
     )
     chat = TestChat(
@@ -87,4 +87,48 @@ def test_1(monkeypatch):
         )
 
         chat >> "you are stupid!"
+        chat << "I'm sorry, I can't respond to that."
+
+
+def test_output(monkeypatch):
+    monkeypatch.setenv("ACTIVEFENCE_API_KEY", "xxx")
+
+    config = RailsConfig.from_content(
+        yaml_content="""
+            models:
+              - type: main
+                engine: openai
+                model: gpt-3.5-turbo-instruct
+
+            rails:
+              output:
+                flows:
+                  - activefence moderation on output
+        """,
+    )
+    chat = TestChat(
+        config,
+        llm_completions=[
+            " You are stupid!",
+        ],
+    )
+
+    with aioresponses() as m:
+        m.post(
+            "https://apis.activefence.com/sync/v3/content/text",
+            payload={
+                "response_id": "36f76a43-ddbe-4308-bc86-1a2b068a00ea",
+                "entity_id": "59fe8fe0-5036-494f-970c-8e28305a3716",
+                "entity_type": "content",
+                "violations": [
+                    {
+                        "violation_type": "abusive_or_harmful.profanity",
+                        "risk_score": 0.95,
+                    }
+                ],
+                "errors": [],
+            },
+        )
+
+        chat >> "Hello!"
         chat << "I'm sorry, I can't respond to that."
