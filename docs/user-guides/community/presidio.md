@@ -94,10 +94,38 @@ rails:
       - ...
 ```
 
+## Score Threshold
+
+To avoid false positives when detecting sensitive data entities, you can adjust the `score_threshold` parameter. This threshold defines the minimum confidence value required for a detected entity to be returned. By setting a higher `score_threshold`, you can reduce false positives by requiring a higher confidence level for detected entities. The default value for this parameter is 0.2.
+
+The `score_threshold` parameter can be configured for any of the above sources (input, output and retrieval) to filter out sensitive data entities with a score above the defined threshold. Below is an example configuration that adjusts the `score_threshold` for a specific case:
+
+```yaml
+
+rails:
+  config:
+    sensitive_data_detection:
+      input:
+        score_threshold: 0.6
+        entities:
+          - PERSON
+          - EMAIL_ADDRESS
+          - ...
+      output:
+        score_threshold: 0.6
+        entities:
+          - PERSON
+          - EMAIL_ADDRESS
+          - ...
+
+```
+
+For additional guidance on handling undetected PII entities and minimizing false negatives, refer to the [Presidio FAQ](https://microsoft.github.io/presidio/faq/#what-can-i-do-if-presidio-does-not-detect-some-of-the-pii-entities-in-my-data-false-negatives).
+
 ## Custom Recognizers
 
 If you have custom entities that you want to detect, you can define custom *recognizers*.
-For more details, check out this [tutorial](https://microsoft.github.io/presidio/tutorial/08_no_code/) and this [example](https://github.com/microsoft/presidio/blob/main/presidio-analyzer/conf/example_recognizers.yaml).
+For more details, check out this [tutorial](https://microsoft.github.io/presidio/tutorial/08_no_code/) and this [example](https://github.com/microsoft/presidio/blob/main/presidio-analyzer/presidio_analyzer/conf/example_recognizers.yaml).
 
 Below is an example of configuring a `TITLE` entity and detecting it inside the input rail.
 

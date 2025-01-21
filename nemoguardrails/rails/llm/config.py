@@ -108,6 +108,11 @@ class SensitiveDataDetectionOptions(BaseModel):
         description="The token that should be used to mask the sensitive data.",
     )
 
+    score_threshold: float = Field(
+        default=0.2,
+        description="The score threshold that should be used to detect the sensitive data.",
+    )
+
 
 class SensitiveDataDetection(BaseModel):
     """Configuration of what sensitive data should be detected."""

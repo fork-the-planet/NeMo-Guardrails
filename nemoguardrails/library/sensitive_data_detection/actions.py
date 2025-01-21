@@ -36,7 +36,9 @@ log = logging.getLogger(__name__)
 
 
 @lru_cache
-def _get_analyzer():
+def _get_analyzer(score_threshold: float = 0.4):
+    if not 0.0 <= score_threshold <= 1.0:
+        raise ValueError("score_threshold must be a float between 0 and 1 (inclusive).")
     try:
         from presidio_analyzer import AnalyzerEngine
 
@@ -69,7 +71,10 @@ def _get_analyzer():
     provider = NlpEngineProvider(nlp_configuration=configuration)
     nlp_engine = provider.create_engine()
 
-    return AnalyzerEngine(nlp_engine=nlp_engine)
+    # TODO: One needs to experiment with the score threshold to get the right value
+    return AnalyzerEngine(
+        nlp_engine=nlp_engine, default_score_threshold=score_threshold
+    )
 
 
 def _get_ad_hoc_recognizers(sdd_config: SensitiveDataDetection):
@@ -94,14 +99,16 @@ async def detect_sensitive_data(source: str, text: str, config: RailsConfig):
     """
     # Based on the source of the data, we use the right options
     sdd_config = config.rails.config.sensitive_data_detection
-    assert source in ["input", "output", "retrieval"]
+    if source not in ["input", "output", "retrieval"]:
+        raise ValueError("source must be one of 'input', 'output', or 'retrieval'")
     options: SensitiveDataDetectionOptions = getattr(sdd_config, source)
+    default_score_threshold = getattr(options, "score_threshold")
 
     # If we don't have any entities specified, we stop
     if len(options.entities) == 0:
         return False
 
-    analyzer = _get_analyzer()
+    analyzer = _get_analyzer(score_threshold=default_score_threshold)
     results = analyzer.analyze(
         text=text,
         language="en",
