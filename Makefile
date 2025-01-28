@@ -1,4 +1,4 @@
-.PHONY: all test tests test_watch test_coverage test_profile pre_commit help
+.PHONY: all test tests test_watch test_coverage test_profile docs pre_commit help
 
 # Default target executed when no specific target is provided to make.
 all: help
@@ -21,6 +21,9 @@ test_coverage:
 test_profile:
 	poetry run pytest -vv tests/ --profile-svg
 
+docs:
+	poetry run sphinx-build -b html docs _build/docs
+
 pre_commit:
 	pre-commit install
 	pre-commit run --all-files
@@ -35,4 +38,5 @@ help:
 	@echo 'test TEST_FILE=<test_file>   - run all tests in given file'
 	@echo 'test_watch                   - run unit tests in watch mode'
 	@echo 'test_coverage                - run unit tests with coverage'
+	@echo 'docs                         - build docs, if you installed the docs dependencies'
 	@echo 'pre_commit                   - run pre-commit hooks'

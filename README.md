@@ -14,7 +14,7 @@
 
 ✨✨✨
 
-📌 **The official NeMo Guardrails documentation has moved to [docs.nvidia.com/nemo-guardrails](https://docs.nvidia.com/nemo-guardrails).**
+📌 **The official NeMo Guardrails documentation has moved to [docs.nvidia.com/nemo/guardrails](https://docs.nvidia.com/nemo/guardrails).**
 
 ✨✨✨
 
@@ -40,6 +40,8 @@ For more detailed instructions, see the [Installation Guide](https://docs.nvidia
 
 ## Overview
 
+<!-- start-documentation-reuse -->
+
 NeMo Guardrails enables developers building LLM-based applications to easily add **programmable guardrails** between the application code and the LLM.
 
 <div align="center">
@@ -53,6 +55,8 @@ Key benefits of adding *programmable guardrails* include:
 - **Connecting models, chains, and other services securely:** you can connect an LLM to other services (a.k.a. tools) seamlessly and securely.
 
 - **Controllable dialog**: you can steer the LLM to follow pre-defined conversational paths, allowing you to design the interaction following conversation design best practices and enforce standard operating procedures (e.g., authentication, support).
+
+<!-- end-documentation-reuse -->
 
 ### Protecting against LLM Vulnerabilities
 
