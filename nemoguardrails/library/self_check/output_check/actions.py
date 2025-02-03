@@ -30,12 +30,13 @@ from nemoguardrails.logging.explain import LLMCallInfo
 log = logging.getLogger(__name__)
 
 
-@action(is_system_action=True)
+@action(is_system_action=True, output_mapping=lambda value: not value)
 async def self_check_output(
     llm_task_manager: LLMTaskManager,
     context: Optional[dict] = None,
     llm: Optional[BaseLLM] = None,
     config: Optional[RailsConfig] = None,
+    **kwargs,
 ):
     """Checks if the output from the bot.
 

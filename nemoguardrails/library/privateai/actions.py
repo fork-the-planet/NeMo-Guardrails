@@ -27,8 +27,23 @@ from nemoguardrails.rails.llm.config import PrivateAIDetection
 log = logging.getLogger(__name__)
 
 
-@action(is_system_action=True)
-async def detect_pii(source: str, text: str, config: RailsConfig):
+def detect_pii_mapping(result: bool) -> bool:
+    """
+    Mapping for detect_pii.
+
+    Since the function returns True when PII is detected,
+    we block if result is True.
+    """
+    return result
+
+
+@action(is_system_action=True, output_mapping=detect_pii_mapping)
+async def detect_pii(
+    source: str,
+    text: str,
+    config: RailsConfig,
+    **kwargs,
+):
     """Checks whether the provided text contains any PII.
 
     Args

@@ -85,8 +85,23 @@ def _get_ad_hoc_recognizers(sdd_config: SensitiveDataDetection):
     return ad_hoc_recognizers
 
 
-@action(is_system_action=True)
-async def detect_sensitive_data(source: str, text: str, config: RailsConfig):
+def detect_sensitive_data_mapping(result: bool) -> bool:
+    """
+    Mapping for detect_sensitive_data.
+
+    Since the function returns True when sensitive data is detected,
+    we block if result is True.
+    """
+    return result
+
+
+@action(is_system_action=True, output_mapping=detect_sensitive_data_mapping)
+async def detect_sensitive_data(
+    source: str,
+    text: str,
+    config: RailsConfig,
+    **kwargs,
+):
     """Checks whether the provided text contains any sensitive data.
 
     Args

@@ -22,9 +22,21 @@ from nemoguardrails.actions import action
 log = logging.getLogger(__name__)
 
 
-@action(name="call cleanlab api", is_system_action=True)
+def cleanlab_output_mapping(result: dict) -> bool:
+    """Block if the trustworthiness score is below 0.6."""
+
+    score = result.get("trustworthiness_score", 1)
+    return score < 0.6
+
+
+@action(
+    name="call cleanlab api",
+    is_system_action=True,
+    output_mapping=cleanlab_output_mapping,
+)
 async def call_cleanlab_api(
     context: Optional[dict] = None,
+    **kwargs,
 ) -> Union[ValueError, ImportError, Dict]:
     api_key = os.environ.get("CLEANLAB_API_KEY")
 
