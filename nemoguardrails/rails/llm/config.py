@@ -247,7 +247,7 @@ class EmbeddingsCacheConfig(BaseModel):
         description="Whether caching of the embeddings should be enabled or not.",
     )
     key_generator: str = Field(
-        default="md5",
+        default="sha256",
         description="The method to use for generating the cache keys.",
     )
     store: str = Field(

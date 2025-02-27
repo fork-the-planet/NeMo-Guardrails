@@ -12,10 +12,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from unittest.mock import patch
 
 import pytest
 
-from nemoguardrails.utils import new_event_dict, safe_eval
+from nemoguardrails.utils import compute_hash, new_event_dict, safe_eval
 
 
 def test_event_generation():
@@ -144,3 +145,21 @@ def test_safe_eval(input_value, expected_result):
     """Test safe_eval with various input values."""
     result = safe_eval(input_value)
     assert result == expected_result
+
+
+@pytest.fixture(params=[AttributeError, ValueError])
+def md5_not_available(request):
+    with patch("hashlib.md5", side_effect=request.param):
+        yield
+
+
+def test_hash_without_md5(md5_not_available):
+    hash_value = compute_hash("test")
+    assert isinstance(hash_value, str)
+    assert len(hash_value) == 64  # SHA256 hash is 64 characters long
+
+
+def test_hash_with_md5():
+    hash_value = compute_hash("test")
+    assert isinstance(hash_value, str)
+    assert len(hash_value) == 32  # MD5 hash is 32 characters long

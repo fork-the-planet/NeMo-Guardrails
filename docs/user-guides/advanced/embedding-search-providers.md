@@ -19,7 +19,7 @@ core:
       search_threshold: None
     cache:
       enabled: False
-      key_generator: md5
+      key_generator: sha256
       store: filesystem
       store_config: {}
 
@@ -35,7 +35,7 @@ knowledge_base:
       search_threshold: None
     cache:
       enabled: False
-      key_generator: md5
+      key_generator: sha256
       store: filesystem
       store_config: {}
 ```
@@ -51,7 +51,7 @@ core:
       embedding_model: text-embedding-ada-002
     cache:
       enabled: False
-      key_generator: md5
+      key_generator: sha256
       store: filesystem
       store_config: {}
 
@@ -63,7 +63,7 @@ knowledge_base:
       embedding_model: text-embedding-ada-002
     cache:
       enabled: False
-      key_generator: md5
+      key_generator: sha256
       store: filesystem
       store_config: {}
 ```
@@ -71,7 +71,7 @@ knowledge_base:
 The default implementation is also designed to support asynchronous execution of the embedding computation process, thereby enhancing the efficiency of the search functionality.
 
 The `cache` configuration is optional. If enabled, it uses the specified `key_generator` and `store` to cache the embeddings. The `store_config` can be used to provide additional configuration options required for the store.
-The default `cache` configuration uses the `md5` key generator and the `filesystem` store. The cache is disabled by default.
+The default `cache` configuration uses the `sha256` key generator and the `filesystem` store. The cache is disabled by default.
 
 ## Batch Implementation
 

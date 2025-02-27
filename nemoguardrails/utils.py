@@ -15,6 +15,7 @@
 import asyncio
 import dataclasses
 import fnmatch
+import hashlib
 import importlib.resources as pkg_resources
 import json
 import os
@@ -408,3 +409,25 @@ def safe_eval(input_value: str) -> str:
     escaped_value = input_value.replace("'", "\\'").replace('"', '\\"')
     input_value = f"'{escaped_value}'"
     return literal_eval(input_value)
+
+
+def compute_hash(text: str) -> str:
+    """
+    Return the hash of the given text using MD5 if available,
+    otherwise use SHA256.
+
+    Args:
+        text (str): The input text to hash.
+
+    Returns:
+        str: The hexadecimal digest of the hash.
+    """
+    try:
+        # Attempt to use MD5 by doing a dummy call.
+        hashlib.md5(b"")
+        hash_func = hashlib.md5
+    except (AttributeError, ValueError):
+        # MD5 is not available use sha256 instead
+        hash_func = hashlib.sha256
+
+    return hash_func(text.encode("utf-8")).hexdigest()
