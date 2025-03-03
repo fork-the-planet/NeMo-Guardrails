@@ -2,21 +2,21 @@ name: Test with Latest Dependencies
 
 on:
   push:
-    paths-ignore:
-      - ".github/**"
-    tags:
-      - "v*"
   schedule:
     - cron: "0 22 * * *" # 10:00 PM UTC, daily
 jobs:
   call-tests:
     strategy:
-      matrix:
-        os: [Ubuntu]
+      matrix: #
+        os: [Ubuntu, macOS, Windows]
         python-version: ["3.9", "3.10", "3.11"]
         include:
           - os: Ubuntu
             image: ubuntu-latest
+          - os: macOS
+            image: macos-15
+          - os: Windows
+            image: windows-latest
       fail-fast: false
     uses: ./.github/workflows/_test.yml
     with:
